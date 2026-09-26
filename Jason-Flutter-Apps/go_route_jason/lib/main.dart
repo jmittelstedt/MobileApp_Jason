@@ -1,16 +1,153 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+/// Home screen
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: Center(child: Text('Hello World!'))),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Home')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () => context.go('/about'),
+              child: const Text('Go to About'),
+            ),
+            ElevatedButton(
+              onPressed: () => context.go('/details/42'),
+              child: const Text('Go to Details (ID: 42)'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
+
+/// About screen
+class AboutScreen extends StatelessWidget {
+  const AboutScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('About')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => context.go('/'),
+          child: const Text('Back'),
+        ),
+      ),
+    );
+  }
+}
+
+/// Details screen with parameter
+class DetailsScreen extends StatelessWidget {
+  final String id;
+  const DetailsScreen({super.key, required this.id});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Details $id')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => context.go('/'),
+          child: const Text('Back'),
+        ),
+      ),
+    );
+  }
+}
+
+/// Error screen
+class ErrorScreen extends StatelessWidget {
+  final String message;
+  const ErrorScreen({super.key, required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Error')),
+      body: Center(child: Text(message)),
+    );
+  }
+}
+
+/// Main App with GoRouter
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
+  // Define routes
+  final GoRouter _router = GoRouter(
+    routes: [
+      GoRoute(
+        path: '/',
+        name: 'home',
+        builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: '/about',
+        name: 'about',
+        builder: (context, state) => const AboutScreen(),
+      ),
+      GoRoute(
+        path: '/details/:id',
+        name: 'details',
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? 'unknown';
+          return DetailsScreen(id: id);
+        },
+      ),
+    ],
+    errorBuilder: (context, state) =>
+        ErrorScreen(message: state.error.toString()),
+  );
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      title: 'GoRouter Example',
+      routerConfig: _router,
+      theme: ThemeData(primarySwatch: Colors.blue),
+    );
+  }
+}
+
+// Example of returning data
+
+class Address {
+  final String street;
+  final String city;
+
+  const Address({required this.street, required this.city});
+}
+
+/* From the checkout screen: 
+
+Future<void> selectAddress() async { 
+  final Address? address = 
+      await context.push<Address>( 
+    '/select-address', 
+  ); 
+ 
+  if (address != null) { 
+    print(address.street); 
+  } 
+} 
+  
+
+// On the selection screen: 
+
+void select(Address address) { 
+  context.pop(address);  // returning address to the checkout page 
+} 
+ */
