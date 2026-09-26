@@ -29,21 +29,56 @@ class WidgetBindingsObserverSample extends StatefulWidget {
 class _WidgetBindingsObserverSampleState
     extends State<WidgetBindingsObserverSample>
     with WidgetsBindingObserver {
-  final List<AppLifecycleState> _stateHistoryList = <AppLifecycleState>[];
+  final List<String> _stringHistoryList = <String>[];
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     if (WidgetsBinding.instance.lifecycleState != null) {
-      _stateHistoryList.add(WidgetsBinding.instance.lifecycleState!);
+      _stringHistoryList.add("Initial resumed");
     }
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      debugPrint('Print State: App resumed');
+    } else if (state == AppLifecycleState.paused) {
+      debugPrint('Print State: App paused');
+    } else if (state == AppLifecycleState.detached) {
+      debugPrint('Print State: App detached');
+    } else if (state == AppLifecycleState.inactive) {
+      debugPrint('Print State: App inactive');
+    }
+
     setState(() {
-      _stateHistoryList.add(state);
+      String text = "";
+      if (state == AppLifecycleState.resumed) {
+        text = 'Print State: App resumed';
+        debugPrint(text);
+        _stringHistoryList.add(text);
+      } else if (state == AppLifecycleState.paused) {
+        text = 'Print State: App paused';
+        debugPrint(text);
+        _stringHistoryList.add(text);
+      } else if (state == AppLifecycleState.detached) {
+        text = 'Print State: App detached';
+        debugPrint(text);
+        _stringHistoryList.add(text);
+      } else if (state == AppLifecycleState.inactive) {
+        text = 'Print State: App inactive';
+        debugPrint(text);
+        _stringHistoryList.add(text);
+      } else if (state == AppLifecycleState.hidden) {
+        text = 'Print State: App hidden';
+        debugPrint(text);
+        _stringHistoryList.add(text);
+      } else {
+        text = state.toString();
+        debugPrint(text);
+        _stringHistoryList.add(text);
+      }
     });
   }
 
@@ -55,12 +90,12 @@ class _WidgetBindingsObserverSampleState
 
   @override
   Widget build(BuildContext context) {
-    if (_stateHistoryList.isNotEmpty) {
+    if (_stringHistoryList.isNotEmpty) {
       return ListView.builder(
-        key: const ValueKey<String>('stateHistoryList'),
-        itemCount: _stateHistoryList.length,
+        key: const ValueKey<String>('stringHistoryList'),
+        itemCount: _stringHistoryList.length,
         itemBuilder: (BuildContext context, int index) {
-          return Text('state is: ${_stateHistoryList[index]}');
+          return Text('${_stringHistoryList[index]}');
         },
       );
     }
