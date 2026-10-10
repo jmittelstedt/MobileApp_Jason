@@ -88,27 +88,84 @@ class TodoScreen extends ConsumerWidget {
     final todosAsync = ref.watch(fetchTodosProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Riverpod Manual Async Todos')),
-      // Handle the data lifecycle using .when
+      backgroundColor: const Color(0xFFFaF6F7),
+      appBar: AppBar(
+        title: const Text('Todo List'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/');
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () => ref.refresh(fetchTodosProvider),
+          ),
+        ],
+      ),
       body: todosAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
-        data: (todos) {
-          return ListView.builder(
-            itemCount: todos.length,
-            itemBuilder: (context, index) {
-              final todo = todos[index];
-              return ListTile(
-                leading: CircleAvatar(child: Text('${todo.id}')),
-                title: Text(todo.title),
-                trailing: Checkbox(
-                  value: todo.completed,
-                  onChanged: null, // UI is read-only for this async fetch
+        data: (todos) => ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: todos.length,
+          itemBuilder: (context, index) {
+            final todo = todos[index];
+
+            return Card(
+              color: const Color(0xFFF5EFF2),
+              elevation: 0,
+              margin: const EdgeInsets.only(bottom: 6),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 4,
                 ),
-              );
-            },
-          );
-        },
+                // 1. Icon configuration
+                leading: Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: todo.completed
+                        ? const Color(0xFFCBEBCE)
+                        : const Color(0xFFFFE8CC),
+                  ),
+                  child: Icon(
+                    todo.completed ? Icons.check : Icons.hourglass_bottom,
+                    color: todo.completed ? Colors.green : Colors.orange,
+                  ),
+                ),
+                // 2. Title layout with custom formatting
+                title: Text(
+                  todo.title,
+                  style: TextStyle(
+                    color: todo.completed ? Colors.black38 : Colors.black87,
+                    decoration: todo.completed
+                        ? TextDecoration.lineThrough
+                        : null,
+                  ),
+                ),
+                // 3. Subtitle dynamic meta-text
+                subtitle: Text('ID: ${todo.id} | User ID: ${todo.userId}'),
+                // 4. Trailing inline Checkbox
+                trailing: Transform.scale(
+                  scale: 0.8, // Lowers the scale factor (1.0 is default size)
+                  child: Checkbox(
+                    value: todo.completed,
+                    activeColor: Colors.grey,
+                    onChanged: (val) {},
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
