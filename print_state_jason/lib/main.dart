@@ -95,7 +95,7 @@ class _WidgetBindingsObserverSampleState
         key: const ValueKey<String>('stringHistoryList'),
         itemCount: _stringHistoryList.length,
         itemBuilder: (BuildContext context, int index) {
-          return Text('${_stringHistoryList[index]}');
+          return Text(_stringHistoryList[index]);
         },
       );
     }
