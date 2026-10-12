@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
               height: rowHeight + 10,
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
+                children: [
                   Text(
                     'Riverpod Async Data Fetching by Jason',
                     style: TextStyle(
