@@ -115,8 +115,8 @@ class TodoScreen extends ConsumerWidget {
             final todo = todos[index];
 
             return Card(
-              color: const Color(0xFFF5EFF2),
-              elevation: 0,
+              color: const Color.fromARGB(255, 227, 227, 227),
+              elevation: 3,
               margin: const EdgeInsets.only(bottom: 6),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
@@ -126,22 +126,22 @@ class TodoScreen extends ConsumerWidget {
                   horizontal: 8,
                   vertical: 4,
                 ),
-                // 1. Icon configuration
+
                 leading: Container(
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: todo.completed
-                        ? const Color(0xFFCBEBCE)
-                        : const Color(0xFFFFE8CC),
+                        ? const Color.fromARGB(255, 204, 236, 207)
+                        : const Color.fromARGB(255, 255, 230, 202),
                   ),
                   child: Icon(
                     todo.completed ? Icons.check : Icons.hourglass_bottom,
                     color: todo.completed ? Colors.green : Colors.orange,
                   ),
                 ),
-                // 2. Title layout with custom formatting
+
                 title: Text(
                   todo.title,
                   style: TextStyle(
@@ -151,9 +151,9 @@ class TodoScreen extends ConsumerWidget {
                         : null,
                   ),
                 ),
-                // 3. Subtitle dynamic meta-text
+
                 subtitle: Text('ID: ${todo.id} | User ID: ${todo.userId}'),
-                // 4. Trailing inline Checkbox
+
                 trailing: Transform.scale(
                   scale: 0.8, // Lowers the scale factor (1.0 is default size)
                   child: Checkbox(
