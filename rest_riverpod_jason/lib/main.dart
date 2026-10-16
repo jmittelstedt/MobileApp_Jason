@@ -35,10 +35,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size screen = MediaQuery.of(context).size;
     final double rowHeight = (screen.height - 20) / 6;
-    final double colWidth = screen.width / 2;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Home'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text('Home Screen'),
+        backgroundColor: Colors.purple[100],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -49,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Riverpod Async Data Fetching by Jason',
+                    'Welcome to the Flutter Todo App!',
                     style: TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
@@ -60,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                     height: 8.0,
                   ), // Optional: adds space between the lines
                   Text(
-                    'Click the button below to navigate to the second page and fetch TODO items from JSONPlaceholder.',
+                    'Tap the button below to fetch and view todos from the REST API.',
                     style: TextStyle(fontSize: 14.0),
                     textAlign: TextAlign.center,
                   ),
@@ -70,7 +72,23 @@ class HomeScreen extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () => context.go('/todo'),
-              child: const Text('View Todo List'),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min, // Hugs content perfectly
+                children: [
+                  Icon(
+                    Icons.arrow_forward, // Right arrow icon
+                    size: 18.0,
+                  ),
+                  SizedBox(width: 8.0), // Spacing between arrow and text
+                  Text(
+                    'Go to Todo List',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500, // Medium text weight
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -91,19 +109,13 @@ class TodoScreen extends ConsumerWidget {
       backgroundColor: const Color(0xFFFaF6F7),
       appBar: AppBar(
         title: const Text('Todo List'),
-        centerTitle: true,
+        backgroundColor: Colors.purple[100],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             context.go('/');
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () => ref.refresh(fetchTodosProvider),
-          ),
-        ],
       ),
       body: todosAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -115,7 +127,7 @@ class TodoScreen extends ConsumerWidget {
             final todo = todos[index];
 
             return Card(
-              color: const Color.fromARGB(255, 227, 227, 227),
+              color: const Color.fromARGB(255, 232, 221, 234),
               elevation: 3,
               margin: const EdgeInsets.only(bottom: 6),
               shape: RoundedRectangleBorder(
@@ -137,7 +149,9 @@ class TodoScreen extends ConsumerWidget {
                         : const Color.fromARGB(255, 255, 230, 202),
                   ),
                   child: Icon(
-                    todo.completed ? Icons.check : Icons.hourglass_bottom,
+                    todo.completed
+                        ? Icons.check
+                        : Icons.access_time_filled_rounded,
                     color: todo.completed ? Colors.green : Colors.orange,
                   ),
                 ),
