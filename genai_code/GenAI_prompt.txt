@@ -1,0 +1,3 @@
+create api endpoints for a crud system that tracks 
+vehicles and their manufacturers in an in-memory DB 
+that uses uv, python, and fastapi
