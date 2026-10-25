@@ -10,6 +10,8 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Use this command to run the API: uv run uvicorn main:app --app-dir src --reload
+
 
 # ---------------------------------------------------------------------------
 # Models
