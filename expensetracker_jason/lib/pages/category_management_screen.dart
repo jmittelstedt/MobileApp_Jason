@@ -23,7 +23,7 @@ class CategoryManagementScreen extends StatelessWidget {
               return ListTile(
                 title: Text(category.name),
                 trailing: IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
+                  icon: Icon(Icons.delete, color: Colors.black),
                   onPressed: () {
                     provider.deleteCategory(category.id);
                   },

@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen>
                 provider.deleteExpense(expense.id);
               },
               background: Container(
-                color: Colors.red,
+                color: Colors.black,
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 alignment: Alignment.centerRight,
                 child: Icon(Icons.delete, color: Colors.white),
@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen>
                     " Business/Person: ${expense.payee}"
                     " Notes: ${expense.notes.isNotEmpty ? expense.notes : 'None'}",
                   ),
-                  trailing: Icon(Icons.delete, color: Colors.red),
+                  trailing: Icon(Icons.delete, color: Colors.black),
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(

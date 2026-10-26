@@ -23,7 +23,7 @@ class SubcategoryManagementScreen extends StatelessWidget {
               return ListTile(
                 title: Text(subcategory.name),
                 trailing: IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
+                  icon: Icon(Icons.delete, color: Colors.black),
                   onPressed: () {
                     provider.deleteSubcategory(subcategory.id);
                   },
