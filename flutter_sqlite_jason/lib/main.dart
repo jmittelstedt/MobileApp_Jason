@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_sqlite_jason/product.dart';
 import 'package:go_router/go_router.dart';
 
 import 'product_database.dart';
@@ -52,6 +53,8 @@ class _AddScreenState extends State<AddScreen> {
   final _form = GlobalKey<FormState>();
   final _id = TextEditingController();
   final _name = TextEditingController();
+  final _price = TextEditingController();
+  final _quantity = TextEditingController();
   bool _saving = false;
 
   @override
@@ -108,6 +111,19 @@ class _AddScreenState extends State<AddScreen> {
                   : null,
               onFieldSubmitted: (_) => _save(),
             ),
+            TextFormField(
+              controller: _price,
+              decoration: const InputDecoration(labelText: 'Price'),
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _quantity,
+              decoration: const InputDecoration(labelText: 'Quantity'),
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            ),
             const SizedBox(height: 24),
             FilledButton(
               onPressed: _saving
@@ -130,18 +146,46 @@ class _AddScreenState extends State<AddScreen> {
 }
 
 /// List screen
-class ListScreen extends StatelessWidget {
-  const ListScreen({super.key});
+class ListScreen extends StatefulWidget {
+  final ProductDatabase database;
+  const ListScreen({super.key, required this.database});
+
+  @override
+  State<ListScreen> createState() => _ListScreenState();
+}
+
+class _ListScreenState extends State<ListScreen> {
+  late final Future<List<Product>> _products = widget.database.all();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Product List')),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () => context.go('/'),
-          child: const Text('Back'),
-        ),
+      body: FutureBuilder<List<Product>>(
+        future: _products,
+        builder: (context, snapshot) {
+          if (snapshot.hasError)
+            return Center(
+              child: Text('Could not load products: ${snapshot.error}'),
+            );
+          if (!snapshot.hasData)
+            return const Center(child: CircularProgressIndicator());
+          final products = snapshot.data!;
+          if (products.isEmpty)
+            return const Center(child: Text('No products yet'));
+          return ListView.separated(
+            itemCount: products.length,
+            separatorBuilder: (_, __) => const Divider(height: 1),
+            itemBuilder: (context, i) => ListTile(
+              leading: CircleAvatar(child: Text('${products[i].id}')),
+              title: Text(products[i].name),
+            ),
+          );
+        },
+      ),
+      floatingActionButton: ElevatedButton(
+        onPressed: () => context.go('/'),
+        child: const Text('Back'),
       ),
     );
   }
@@ -183,7 +227,7 @@ class MyApp extends StatelessWidget {
       GoRoute(
         path: '/list',
         name: 'list',
-        builder: (context, state) => const ListScreen(),
+        builder: (context, state) => ListScreen(database: database),
       ),
     ],
     errorBuilder: (context, state) =>
