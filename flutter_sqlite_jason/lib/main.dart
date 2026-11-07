@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
-void main() {
-  runApp(MyApp());
+import 'product_database.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final database = await ProductDatabase.open();
+  runApp(MyApp(database: database));
 }
 
 /// Home screen
@@ -33,17 +39,90 @@ class HomeScreen extends StatelessWidget {
 }
 
 /// Add screen
-class AddScreen extends StatelessWidget {
-  const AddScreen({super.key});
+class AddScreen extends StatefulWidget {
+  const AddScreen({super.key, required this.database});
+
+  final ProductDatabase database;
+
+  @override
+  State<AddScreen> createState() => _AddScreenState();
+}
+
+class _AddScreenState extends State<AddScreen> {
+  final _form = GlobalKey<FormState>();
+  final _id = TextEditingController();
+  final _name = TextEditingController();
+  bool _saving = false;
+
+  @override
+  void dispose() {
+    _id.dispose();
+    _name.dispose();
+    super.dispose();
+  }
+
+  Future<void> _save() async {
+    if (!_form.currentState!.validate()) return;
+    setState(() => _saving = true);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final product = await widget.database.add(
+        id: _id.text.isEmpty ? null : int.parse(_id.text),
+        name: _name.text.trim(),
+        price: 0.0,
+        quantity: 0,
+      );
+      messenger.showSnackBar(
+        SnackBar(content: Text('Added ${product.name} (id ${product.id})')),
+      );
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add')),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () => context.go('/'),
-          child: const Text('Back'),
+      appBar: AppBar(title: const Text('Add product')),
+      body: Form(
+        key: _form,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            TextFormField(
+              controller: _id,
+              decoration: const InputDecoration(
+                labelText: 'Id',
+                helperText: 'Leave blank to use the next id',
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _name,
+              decoration: const InputDecoration(labelText: 'Name'),
+              autofocus: true,
+              validator: (value) => (value == null || value.trim().isEmpty)
+                  ? 'Enter a name'
+                  : null,
+              onFieldSubmitted: (_) => _save(),
+            ),
+            const SizedBox(height: 24),
+            FilledButton(
+              onPressed: _saving
+                  ? null
+                  : () {
+                      _save();
+                      context.go('/');
+                    },
+              child: const Text('Save'),
+            ),
+            ElevatedButton(
+              onPressed: () => context.go('/'),
+              child: const Text('Back'),
+            ),
+          ],
         ),
       ),
     );
@@ -57,7 +136,7 @@ class ListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('List')),
+      appBar: AppBar(title: const Text('Product List')),
       body: Center(
         child: ElevatedButton(
           onPressed: () => context.go('/'),
@@ -84,10 +163,12 @@ class ErrorScreen extends StatelessWidget {
 
 /// Main App with GoRouter
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  MyApp({super.key, required this.database});
+
+  final ProductDatabase database;
 
   // Define routes
-  final GoRouter _router = GoRouter(
+  late final GoRouter _router = GoRouter(
     routes: [
       GoRoute(
         path: '/',
@@ -97,7 +178,7 @@ class MyApp extends StatelessWidget {
       GoRoute(
         path: '/add',
         name: 'add',
-        builder: (context, state) => const AddScreen(),
+        builder: (context, state) => AddScreen(database: database),
       ),
       GoRoute(
         path: '/list',

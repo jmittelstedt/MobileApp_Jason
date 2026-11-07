@@ -6,12 +6,12 @@ import 'product.dart';
 import 'package:flutter/foundation.dart';
 
 /// The products table in a SQLite database that lives in the browser (IndexedDB).
-class ProductRepository {
-  ProductRepository._(this._db);
+class ProductDatabase {
+  ProductDatabase._(this._db);
 
   final Database _db;
 
-  static Future<ProductRepository> open() async {
+  static Future<ProductDatabase> open() async {
     final db = await databaseFactoryFfiWeb.openDatabase(
       'products.db',
       options: OpenDatabaseOptions(
@@ -34,7 +34,7 @@ class ProductRepository {
         },
       ),
     );
-    return ProductRepository._(db);
+    return ProductDatabase._(db);
   }
 
   /// Adds a product. Without an [id], SQLite assigns the next one.
