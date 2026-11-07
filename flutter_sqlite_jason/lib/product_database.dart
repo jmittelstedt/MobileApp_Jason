@@ -18,35 +18,52 @@ class ProductDatabase {
         version: 1,
         onCreate: (db, version) async {
           await db.execute(
-            'CREATE TABLE products (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, price REAL NOT NULL, quantity INTEGER NOT NULL)',
+            'CREATE TABLE products ('
+            'id INTEGER PRIMARY KEY AUTOINCREMENT, '
+            'name TEXT NOT NULL, '
+            'price REAL NOT NULL, '
+            'quantity INTEGER NOT NULL'
+            ' )',
           );
-          // Two starter products, so the list has something to show on the first run.
-          await db.insert('products', {
-            'name': 'Coffee Mug',
-            'price': 12.99,
-            'quantity': 100,
-          });
-          await db.insert('products', {
-            'name': 'Notebook',
-            'price': 5.99,
-            'quantity': 50,
-          });
+
+          await testdata(db);
         },
       ),
     );
     return ProductDatabase._(db);
   }
 
+  static Future<void> testdata(Database db) async {
+    await db.insert('products', {
+      'name': 'Coffee Pot',
+      'price': 42.99,
+      'quantity': 100,
+    });
+    await db.insert('products', {
+      'name': 'Windows Laptop',
+      'price': 512.99,
+      'quantity': 50,
+    });
+    await db.insert('products', {
+      'name': 'Tennis Shoes',
+      'price': 32.99,
+      'quantity': 15,
+    });
+    await db.insert('products', {
+      'name': 'Hot Dog',
+      'price': 3.99,
+      'quantity': 150,
+    });
+  }
+
   /// Adds a product. Without an [id], SQLite assigns the next one.
   Future<Product> add({
-    int? id,
     required String name,
     required double price,
     required int quantity,
   }) async {
     try {
       final newId = await _db.insert('products', {
-        if (id != null) 'id': id,
         'name': name,
         'price': price,
         'quantity': quantity,
