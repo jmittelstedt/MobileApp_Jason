@@ -4,7 +4,7 @@ import 'package:flutter_sqlite_jason/product.dart';
 import 'package:go_router/go_router.dart';
 
 import 'product_database.dart';
-import 'appdrawer.dart';
+import 'main.dart';
 
 /// Home screen
 class HomeScreen extends StatelessWidget {
@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                 context: context,
                 label: 'Add Product',
                 onPressed: () {
-                  context.go('/add');
+                  context.go(Routes.add);
                 },
               ),
               const SizedBox(height: 32),
@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                 context: context,
                 label: 'View Product List',
                 onPressed: () {
-                  context.go('/list');
+                  context.go(Routes.list);
                 },
               ),
             ],
@@ -133,7 +133,7 @@ class AddScreen extends StatelessWidget {
                 ),
               ),
             );
-            router.go('/');
+            router.go(Routes.home);
           })
           .whenComplete(() => saving.value = false);
     }
@@ -188,7 +188,7 @@ class AddScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: ElevatedButton(
-        onPressed: () => context.go('/'),
+        onPressed: () => context.go(Routes.home),
         child: const Text('Back'),
       ),
     );
@@ -239,7 +239,7 @@ class ListScreen extends StatelessWidget {
         },
       ),
       floatingActionButton: ElevatedButton(
-        onPressed: () => context.go('/'),
+        onPressed: () => context.go(Routes.home),
         child: const Text('Back'),
       ),
     );

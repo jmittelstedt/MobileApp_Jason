@@ -13,45 +13,13 @@ void main() async {
   runApp(MyApp(database: database));
 }
 
+class Routes {
+  static const String home = '/';
+  static const String add = '/add';
+  static const String list = '/list';
+}
+
 /// Main App with GoRouter
-/* class MyApp extends StatelessWidget {
-  MyApp({super.key, required this.database});
-
-  final ProductDatabase database;
-
-  // Define routes
-  late final GoRouter _router = GoRouter(
-    routes: [
-      GoRoute(
-        path: '/',
-        name: 'home',
-        builder: (context, state) => const HomeScreen(),
-      ),
-      GoRoute(
-        path: '/add',
-        name: 'add',
-        builder: (context, state) => AddScreen(database: database),
-      ),
-      GoRoute(
-        path: '/list',
-        name: 'list',
-        builder: (context, state) => ListScreen(database: database),
-      ),
-    ],
-    errorBuilder: (context, state) =>
-        ErrorScreen(message: state.error.toString()),
-  );
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: 'GoRouter Example',
-      routerConfig: _router,
-      theme: ThemeData(primarySwatch: Colors.blue),
-    );
-  }
-}*/
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.database});
 
@@ -60,16 +28,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final router = GoRouter(
-      initialLocation: '/',
+      initialLocation: Routes.home,
 
       routes: [
-        GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
         GoRoute(
-          path: '/add',
+          path: Routes.home,
+          builder: (context, state) => const HomeScreen(),
+        ),
+        GoRoute(
+          path: Routes.add,
           builder: (context, state) => AddScreen(database: database),
         ),
         GoRoute(
-          path: '/list',
+          path: Routes.list,
           builder: (context, state) => ListScreen(database: database),
         ),
       ],
@@ -87,11 +58,50 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Example of returning data
+class AppDrawer extends StatelessWidget {
+  const AppDrawer({super.key});
 
-//class Address {
-//  final String street;
-//  final String city;
-
-//  const Address({required this.street, required this.city});
-//}
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: [
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.deepPurple, Colors.deepPurpleAccent],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Text(
+              'Products',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
+            onTap: () {
+              context.go(Routes.home);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.add),
+            title: const Text('Add product'),
+            onTap: () {
+              context.go(Routes.add);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.list),
+            title: const Text('Product list'),
+            onTap: () {
+              context.go(Routes.list);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}

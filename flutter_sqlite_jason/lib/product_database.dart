@@ -26,7 +26,7 @@ class ProductDatabase {
             ' )',
           );
 
-          await testdata(db);
+          //await testdata(db);
         },
       ),
     );
