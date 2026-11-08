@@ -13,7 +13,7 @@ class ProductDatabase {
 
   static Future<ProductDatabase> open() async {
     final db = await databaseFactoryFfiWeb.openDatabase(
-      'products.db',
+      'products',
       options: OpenDatabaseOptions(
         version: 1,
         onCreate: (db, version) async {

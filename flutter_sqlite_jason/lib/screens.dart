@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
             children: [
               _buildNavigationButton(
                 context: context,
-                label: 'Add Product',
+                label: 'Create Product',
                 onPressed: () {
                   context.go(Routes.add);
                 },
@@ -181,7 +181,7 @@ class AddScreen extends StatelessWidget {
               valueListenable: saving,
               builder: (context, isSaving, _) => FilledButton(
                 onPressed: isSaving ? null : save,
-                child: const Text('Save'),
+                child: const Text('Add product'),
               ),
             ),
           ],

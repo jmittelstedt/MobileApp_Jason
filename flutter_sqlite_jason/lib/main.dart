@@ -88,7 +88,7 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.add),
-            title: const Text('Add product'),
+            title: const Text('Create product'),
             onTap: () {
               context.go(Routes.add);
             },
