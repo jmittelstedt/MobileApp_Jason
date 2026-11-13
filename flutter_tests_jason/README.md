@@ -30,5 +30,7 @@ Change to the directory flutter_tests_jason
 
 
 ```
-flutter test
+flutter test test/utils
+
+flutter test test/widgets
 ```
