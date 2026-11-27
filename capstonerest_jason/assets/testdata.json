@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "title": "Daily Standup Meeting",
+    "type": "Work",
+    "date": "2026-11-25T00:00:00.000",
+    "time": "09:30"
+  },
+  {
+    "id": 2,
+    "title": "Dentist Checkup",
+    "type": "Health",
+    "date": "2026-11-26T00:00:00.000",
+    "time": "14:15"
+  },
+  {
+    "id": 3,
+    "title": "Grocery Run",
+    "type": "Personal",
+    "date": "2026-11-27T00:00:00.000",
+    "time": "17:45"
+  },
+  {
+    "id": 4,
+    "title": "Flutter Study Session",
+    "type": "Learning",
+    "date": "2026-11-28T00:00:00.000",
+    "time": "10:00"
+  },
+  {
+    "id": 5,
+    "title": "Dinner with Friends",
+    "type": "Social",
+    "date": "2026-11-29T00:00:00.000",
+    "time": "19:30"
+  }
+]

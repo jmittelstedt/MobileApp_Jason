@@ -78,6 +78,12 @@ class _CreateRegistrationScreenState extends State<CreateRegistrationScreen> {
             ),
 
             ListTile(
+              leading: const Icon(Icons.event),
+              title: const Text("List Events"),
+              onTap: () => context.go('/list-events'),
+            ),
+
+            ListTile(
               leading: const Icon(Icons.calendar_month),
               title: const Text('Calendar'),
               onTap: () => context.go('/calendar'),

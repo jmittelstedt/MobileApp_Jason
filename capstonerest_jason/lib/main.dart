@@ -1,5 +1,6 @@
 import 'package:capstonerest_jason/calendarscreen.dart';
 import 'package:capstonerest_jason/eventscreen.dart';
+import 'package:capstonerest_jason/listeventsscreen.dart';
 import 'package:capstonerest_jason/loginscreen.dart';
 import 'package:capstonerest_jason/registrationscreen.dart';
 import 'package:capstonerest_jason/mapscreen.dart';
@@ -18,7 +19,14 @@ final GoRouter _router = GoRouter(
     GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
     GoRoute(
       path: '/events',
-      builder: (context, state) => const CreateEventScreen(),
+      builder: (context, state) {
+        final event = state.extra as Event?;
+        return CreateEventScreen(event: event);
+      },
+    ),
+    GoRoute(
+      path: '/list-events',
+      builder: (context, state) => const CreateListEventScreen(),
     ),
     GoRoute(
       path: '/calendar',
@@ -97,6 +105,11 @@ class HomeScreen extends StatelessWidget {
               leading: const Icon(Icons.event),
               title: const Text("Create Event"),
               onTap: () => context.go('/events'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.event),
+              title: const Text("List Events"),
+              onTap: () => context.go('/list-events'),
             ),
             ListTile(
               leading: const Icon(Icons.calendar_month),
