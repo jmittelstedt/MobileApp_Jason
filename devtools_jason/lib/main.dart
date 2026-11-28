@@ -102,8 +102,24 @@ class _MyHomePageState extends State<MyHomePage> {
           // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
           // action in the IDE, or press "p" in the console), to see the
           // wireframe for each widget.
-          mainAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            /*SizedBox(
+              width: double.infinity,
+              height: 100,
+              child: Image.asset(
+                'assets/images/mcdonalds.png',
+                fit: BoxFit.cover,
+              ),
+            ),*/
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 200, maxHeight: 200),
+              child: Image.asset(
+                'assets/images/mcdonalds.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+            // Image.asset('assets/images/mcdonalds.png'),
             const Text('You have pushed the button this many times:'),
             Text(
               '$_counter',
